@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Validación Excel - Upload</title>
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'validator/css/upload.css' %}">
+</head>
+<body>
+	<main class="page">
+		<header class="hero">
+			<h1 class="title">Validación de Excel</h1>
+			<p class="subtitle">Sube tus archivos y genera el reporte de validación</p>
+		</header>
+
+		<section class="container">
+			{% if error %}
+			<div class="alert alert-error">Error: {{ error }}</div>
+			{% endif %}
+
+			{% if success %}
+			<div class="alert alert-success">Proceso completado. Descarga los archivos:</div>
+			<ul class="downloads">
+				<li><a class="download-link" href="{{ download_links.validos_xlsx }}">validos.xlsx</a></li>
+				<li><a class="download-link" href="{{ download_links.rechazados_xlsx }}">rechazados.xlsx</a></li>
+				<li><a class="download-link" href="{{ download_links.pdf }}">reporte_validacion.pdf</a></li>
+			</ul>
+			<hr />
+			{% endif %}
+
+					<form class="upload-form" method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						<div class="form-grid">
+							<div class="form-field">
+								{{ form.bruto.label_tag }}
+								{{ form.bruto }}
+								{% if form.bruto.errors %}
+								<div class="field-error">{{ form.bruto.errors }}</div>
+								{% endif %}
+							</div>
+
+							<div class="form-field">
+								{{ form.main_pier.label_tag }}
+								{{ form.main_pier }}
+								{% if form.main_pier.errors %}
+								<div class="field-error">{{ form.main_pier.errors }}</div>
+								{% endif %}
+							</div>
+
+							<div class="form-field">
+								{{ form.suscriptores.label_tag }}
+								{{ form.suscriptores }}
+								{% if form.suscriptores.errors %}
+								<div class="field-error">{{ form.suscriptores.errors }}</div>
+								{% endif %}
+							</div>
+						</div>
+
+						<div class="form-actions">
+							<button class="btn primary" type="submit">Ejecutar validación</button>
+							<button class="btn ghost" type="reset">Limpiar</button>
+						</div>
+					</form>
+
+			<p class="notes">Notas: Archivos máximo 5MB. En desarrollo los archivos están en <code>/media/processing/</code>.</p>
+		</section>
+	</main>
+</body>
+</html>
